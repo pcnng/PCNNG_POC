@@ -1,0 +1,33 @@
+---
+Name: Deploy VM from a template in vSphere
+- hosts: vmcreate
+  gather_facts: false
+  connection: local
+  vars:
+    vcenter_hostname: 10.50.10.6
+    esxhost: esxi-1151-eastus.az.cloudsimple.io
+    datastore: ds:///vmfs/volumes/vsan:524bdbfc771d8a12-16d2278c1a9a79c6/ 
+    network: 2811
+    vmtemplate: PCNNG_2016SVR_Template
+    vmcluster: Cluster
+    notes:created by Phillip for Ansible Deployment
+
+  tasks:
+    - name: Check for required Variables
+      fail: msg=Must pass name to -e
+      when: Name is not defined
+
+    - Name: Check for vSphere access parameters
+      fail: msg=Must set vCenter_user and vCenter_pass in a Vault
+      when: (vCenter_user is not defined) or (vCenter_pass is not defined)
+
+    - Name: Create VM from vmtemplate
+      vsphere_guest:
+        vcenter_hostname: {{10.50.10.6" or "vcsa-1467-eastus.az.cloudsimple.io}}
+        username: cloudsimple
+        password: xxxxxxxxxxx
+        guest: {{TestAnsible1}}
+        from_template: yes
+        template_src: PCNNG_2016SVR_Template
+        cluster:
+          resource_pool
